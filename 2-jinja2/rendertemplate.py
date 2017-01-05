@@ -1,6 +1,7 @@
 from jinja2 import Environment, FileSystemLoader
 import yaml
 from bracket_expansion import *
+from passlib.hash import md5_crypt
 
 ENV = Environment(loader=FileSystemLoader('./templates/'))
 
@@ -34,3 +35,12 @@ gen('6-inlinevars')
 ENV.filters['bracket_expansion'] = bracket_expansion
 template2 = ENV.get_template('7-customfilter.j2')
 print template2.render(iface_pattern='GigabitEthernet0/0/[0-5]', vlan_name=100)
+
+def type5_encrypt(password):
+    m = md5_crypt.encrypt(password,  salt_size=4)
+    return m
+
+
+ENV.filters['type5_encrypt'] = type5_encrypt
+template3 = ENV.get_template('8-customfilter.j2')
+print template3.render(password="Almafa")
